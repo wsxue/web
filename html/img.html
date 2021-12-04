@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Img</title>
+</head>
+<body>
+    <a href="javascript:;" onclick="javascript:history.back(-1)">Back</a>
+    <img id='img' class='img' src="" alt="img loading..."></img>
+</body>
+</html>
+<script>
+    let queryParam = window.location.search;
+    document.getElementById('img').setAttribute('src', queryParam.substring(1).split('=')[1])
+</script>
+<style>
+    .img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+</style>

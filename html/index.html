@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>MapBox GL</title>
+    <!-- add mapbox gl -->
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.6.0/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.6.0/mapbox-gl.css' rel='stylesheet' />
+
+    <link href='../css/map.css' rel='stylesheet'>
+    <script src='../js/constant.js'></script>
+    <script src='../js/map.js'></script>
+</head>
+
+<body>
+    <div id='map' class='map'></div>
+    <div id='right_display'></div>
+    <div id='template' style="display: none;">
+        <div class='img_content'>
+            <div class='c_header'>
+                <img class='c_img' src='' alt='image loading...'>
+            </div>
+            <div class='c_foot'>
+                <div>Station: <span class='station_name'></span></div>
+                <div>Street Address: <span class='street_address'></span></div>
+                <div>Longitude: <span class='lng'></span></div>
+                <div>Latitude: <span class='lat'></span></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+    mapboxgl.accessToken = TK;
+    console.log('window: \n', window);
+    const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/scotthughes/ckq7op9qz5zom17pj0pcv2y83',
+        center: [-122.81889097015838, 49.14442911954965],
+        zoom: 10
+    });
+    map.on('load', () => {
+        // load image
+        addImage(map);
+        console.log(' mapbox load');
+        addSource(map, 'my-source');
+        addLayer(map, 'surrey-test');
+        // addLayer(map, 'surrey-test-hover', ['==', 'station_name', ''])
+
+        let sourceLoaded = false;
+        map.on('sourcedata', e => {
+            if (!sourceLoaded && !e.sourceDataType && e.sourceId == 'my-source' && e.isSourceLoaded) {
+                // my-source loaded
+                sourceLoaded = true;
+                renderDom();
+            }
+        })
+        map.on('dragend', () => {
+            renderDom();
+        })
+        map.on('zoomend', () => {
+            renderDom();
+        })
+        map.on('click', 'surrey-test', e => {
+            if (e.features[0]) {
+                highLingtImg(e.features[0].properties.station_name);
+            }
+        })
+    })
+
+</script>
+
+<style>
+    body {
+        margin: 0;
+    }
+</style>
